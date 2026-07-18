@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Clicker Game com Imagens</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#222;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.game-container{
+    background:#333;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    width:400px;
+}
+
+.stats{
+    background:#444;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+
+#main-button{
+    background:none;
+    border:none;
+    cursor:pointer;
+}
+
+
+#main-button img{
+    width:180px;
+    transition:0.2s;
+}
+
+
+#main-button img:hover{
+    transform:scale(1.1);
+}
+
+
+#main-button img:active{
+    transform:scale(0.9);
+}
+
+
+
+.upgrade-btn{
+
+    width:100px;
+    margin:10px;
+    cursor:pointer;
+    transition:0.2s;
+
+}
+
+
+.upgrade-btn:hover{
+    transform:scale(1.1);
+}
+
+
+.bloqueado{
+
+    filter:grayscale(100%);
+    opacity:0.5;
+    pointer-events:none;
+
+}
+
+
+.win{
+
+    color:yellow;
+    font-size:20px;
+    display:none;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="game-container">
+
+<h1><b>SENAC</b> Clicker</h1>
+
+
+<div class="stats">
+
+<p>Pontos: <span id="score">0</span></p>
+
+<p>Valor do Clique: <span id="click-value">1</span></p>
+
+<p>Upgrades: <span id="upgrades">0</span></p>
+
+</div>
+
+
+
+<button id="main-button">
+
+<img src="clique.png">
+<audio src="KairoKairo.mp3"></audio>
+
+</button>
+
+
+
+<h2>Loja</h2>
+
+
+<img class="upgrade-btn"
+src="upgrade1.png"
+id="upg1"
+data-cost="10"
+data-boost="1">
+<audio src="PedroPedro"></audio>
+
+
+
+<img class="upgrade-btn"
+src="upgrade2.png"
+id="upg2"
+data-cost="50"
+data-boost="8">
+<audio src="AHHHHHHH"></audio>
+
+
+<img class="upgrade-btn"
+src="upgrade3.png"
+id="upg3"
+data-cost="100"
+data-boost="32">
+<audio src="SENAC MAN"></audio>
+
+
+
+<p id="win" class="win">
+🎉 Você chegou a 500 pontos! 🎉
+</p>
+
+
+</div>
+
+
+
+<script>
+
+
+let score = 0;
+
+let clickValue = 1;
+
+let upgrades = 0;
+
+let ganhou = false;
+
+
+
+const scoreText = document.getElementById("score");
+
+const clickText = document.getElementById("click-value");
+
+const upgradesText = document.getElementById("upgrades");
+
+const win = document.getElementById("win");
+
+const clickButton = document.getElementById("main-button");
+
+
+const upgradeButtons = document.querySelectorAll(".upgrade-btn");
+
+
+
+
+// botão principal
+
+clickButton.onclick = function(){
+
+    score += clickValue;
+
+    atualizar();
+
+};
+
+
+
+
+
+// upgrades
+
+upgradeButtons.forEach(function(botao){
+
+
+botao.onclick = function(){
+
+
+    let custo = Number(botao.dataset.cost);
+
+    let aumento = Number(botao.dataset.boost);
+
+
+
+    if(score >= custo){
+
+
+        score -= custo;
+
+        clickValue += aumento;
+
+        upgrades++;
+
+
+        atualizar();
+
+
+    }
+
+
+};
+
+
+});
+
+
+
+
+
+
+function atualizar(){
+
+
+scoreText.innerHTML = score;
+
+clickText.innerHTML = clickValue;
+
+upgradesText.innerHTML = upgrades;
+
+
+
+// bloquear upgrades sem pontos
+
+upgradeButtons.forEach(function(botao){
+
+
+let custo = Number(botao.dataset.cost);
+
+
+
+if(score < custo){
+
+    botao.classList.add("bloqueado");
+
+}else{
+
+    botao.classList.remove("bloqueado");
+
+}
+
+
+});
+
+
+
+
+
+if(score >= 500 && ganhou == false){
+
+    win.style.display="block";
+
+    ganhou=true;
+
+}
+
+
+
+}
+
+
+
+atualizar();
+
+
+
+</script>
+
+
+</body>
+</html>
